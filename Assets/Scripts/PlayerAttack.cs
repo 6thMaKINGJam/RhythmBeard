@@ -3,11 +3,11 @@ using UnityEngine;
 public class PlayerAttack : MonoBehaviour
 {
     [Header("Attack Settings")]
-    public float attackRangeX = 1.5f; // °ø°Ý »ç°Å¸® (°¡·Î)
-    public float attackRangeY = 1.0f; // °ø°Ý ¹üÀ§ (¼¼·Î)
-    public Vector2 offset = new Vector2(1.0f, 0); // ÇÃ·¹ÀÌ¾î Áß½É¿¡¼­ ¾ó¸¶³ª ¾ÕÀ» ¶§¸±Áö
-    public LayerMask enemyLayer; // ¸ó½ºÅÍ¸¸ ¶§¸®±â À§ÇÑ ·¹ÀÌ¾î ¼³Á¤
-    public int damage = 1; // °ø°Ý·Â 1 [cite: 70]
+    public float attackRangeX = 1.5f; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ (ï¿½ï¿½ï¿½ï¿½)
+    public float attackRangeY = 1.0f; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½)
+    public Vector2 offset = new Vector2(1.0f, 0); // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ß½É¿ï¿½ï¿½ï¿½ ï¿½ó¸¶³ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public LayerMask enemyLayer; // ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½
+    public int damage = 1; // ï¿½ï¿½ï¿½Ý·ï¿½ 1 [cite: 70]
 
     private Animator anim;
 
@@ -28,26 +28,26 @@ public class PlayerAttack : MonoBehaviour
     {
         if (anim) anim.SetTrigger("Attack");
 
-        // 2. °ø°Ý ¹üÀ§ °è»ê (ÇÃ·¹ÀÌ¾î À§Ä¡ + offset À§Ä¡¿¡ »ç°¢Çü ±×¸²)
+        // 2. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ (ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡ + offset ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ç°¢ï¿½ï¿½ ï¿½×¸ï¿½)
         Vector2 attackPos = (Vector2)transform.position + offset;
         Vector2 boxSize = new Vector2(attackRangeX, attackRangeY);
 
-        // 3. ÇØ´ç ¹üÀ§ ³»ÀÇ ¸ðµç ÄÝ¶óÀÌ´õ °¨Áö
+        // 3. ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ý¶ï¿½ï¿½Ì´ï¿½ ï¿½ï¿½ï¿½ï¿½
         Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(attackPos, boxSize, 0f, enemyLayer);
 
-        // 4. °¨ÁöµÈ Àû¿¡°Ô µ¥¹ÌÁö Àü´Þ
+        // 4. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         foreach (Collider2D enemy in hitEnemies)
         {
             Monster monsterScript = enemy.GetComponent<Monster>();
             if (monsterScript != null)
             {
-                monsterScript.TakeDamage(damage);
-                Debug.Log("¸ó½ºÅÍ Å¸°Ý ¼º°ø!");
+                monsterScript.TakeDamage(damage, (Vector2)gameObject.transform.position);
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½!");
             }
         }
     }
 
-    // ¿¡µðÅÍ¿¡¼­ °ø°Ý ¹üÀ§¸¦ ´«À¸·Î º¸±â À§ÇÑ ±â´É (°ÔÀÓ¿£ ¿µÇâ X)
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½Ó¿ï¿½ ï¿½ï¿½ï¿½ï¿½ X)
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
