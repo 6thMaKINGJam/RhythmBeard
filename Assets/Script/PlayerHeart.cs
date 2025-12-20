@@ -29,7 +29,7 @@ public class PlayerHeart : MonoBehaviour
         if (currentHealth <= 0)
         {
             Debug.Log("게임 오버!");
-            // 여기에 캐릭터를 멈추거나 재시작하는 코드를 넣을 수 있습니다.
+            FindObjectOfType<ResultManager>().ShowResult();
         }
     }
    
