@@ -12,7 +12,9 @@ public class RhythmMovement : MonoBehaviour
     public float jumpHeight = 3f;
     public float jumpDistanceTiles = 4f;
 
+    [Header("Audio Settings")]
     public AudioClip jumpSound;
+    public AudioSource bgmSource;
 
     // 상태 확인용
     [SerializeField] private float moveSpeed;
@@ -20,9 +22,9 @@ public class RhythmMovement : MonoBehaviour
     private bool isGrounded;
     private Rigidbody2D rb;
 
-    // [추가] 애니메이터 변수
+    // 애니메이터 변수
     private Animator anim;
-    private AudioSource audioSource;
+    private AudioSource sfxAudioSource; // 효과음용
 
     void Start()
     {
@@ -33,7 +35,7 @@ public class RhythmMovement : MonoBehaviour
         // 만약 자식 오브젝트(Sprite)에 애니메이터가 있다면 아래 줄 주석 해제
         // if (anim == null) anim = GetComponentInChildren<Animator>();
 
-        audioSource = GetComponent<AudioSource>();
+        sfxAudioSource = GetComponent<AudioSource>();
 
         CalculateMovementValues();
     }
@@ -56,8 +58,25 @@ public class RhythmMovement : MonoBehaviour
 
     void Update()
     {
-        // 1. 앞으로 계속 달리기 (Run)
-        // Idle 상태 없이 무조건 달립니다.
+        // [핵심 로직] 배경음악이 아직 시작 안 했으면 움직이지 않음
+        // bgmSource가 연결되어 있고, 아직 플레이 중이 아니라면 대기
+        if (bgmSource != null && !bgmSource.isPlaying)
+        {
+            // X축 속도는 0, Y축(중력)은 유지 (공중에 떠서 시작할 수도 있으니까)
+            rb.velocity = new Vector2(0, rb.velocity.y);
+
+            // 애니메이션도 멈춰있게 하려면 속도 0 (선택사항)
+            if (anim != null) anim.speed = 0;
+
+            return; // 아래 코드는 실행 안 하고 여기서 Update 종료!
+        }
+
+        // --- 노래가 시작되면 아래 코드가 실행됨 ---
+
+        // 애니메이션 다시 재생 (위에서 멈췄을 경우)
+        if (anim != null) anim.speed = 1;
+
+        // 1. 앞으로 계속 달리기
         rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
 
         // 2. 점프 입력 (Z)
@@ -66,16 +85,13 @@ public class RhythmMovement : MonoBehaviour
             Jump();
         }
 
-        // 3. [수정] 공격 입력 (M)
+        // 3. 공격 입력 (M)
         if (Input.GetKeyDown(KeyCode.M))
         {
             if (anim != null)
             {
                 anim.SetTrigger("Attack"); // 애니메이터에 'Attack' 신호 보냄
             }
-
-            // 여기에 실제 공격 판정(Hitbox 켜기 등) 함수를 넣으시면 됩니다.
-            // 예: AttackLogic();
         }
 
         // 4. [추가] 애니메이터에 땅에 닿았는지 알려주기 (점프 모션용)
@@ -90,7 +106,7 @@ public class RhythmMovement : MonoBehaviour
         rb.velocity = new Vector2(rb.velocity.x, jumpVelocity);
         isGrounded = false;
 
-        if (audioSource && jumpSound) audioSource.PlayOneShot(jumpSound, 3.0f);
+        if (sfxAudioSource && jumpSound) sfxAudioSource.PlayOneShot(jumpSound, 3.0f);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

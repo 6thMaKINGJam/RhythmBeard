@@ -1149,6 +1149,7 @@ MonoBehaviour:
   jumpHeight: 3
   jumpDistanceTiles: 4
   jumpSound: {fileID: 8300000, guid: 0cfed38de0534c041bab67948a1e6254, type: 3}
+  bgmSource: {fileID: 1368047206}
   moveSpeed: 0
   jumpVelocity: 0
 --- !u!95 &269910872
