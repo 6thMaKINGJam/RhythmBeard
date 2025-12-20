@@ -9,16 +9,20 @@ public class PlayerAttack : MonoBehaviour
     public LayerMask enemyLayer; // ���͸� ������ ���� ���̾� ����
     public int damage = 1; // ���ݷ� 1 [cite: 70]
 
+    public AudioClip attackSound;
+    private AudioSource audioSource;
+
     private Animator anim;
 
     void Start()
     {
         anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.RightShift))
+        if (Input.GetKeyDown(KeyCode.M))
         {
             Attack();
         }
@@ -27,6 +31,7 @@ public class PlayerAttack : MonoBehaviour
     void Attack()
     {
         if (anim) anim.SetTrigger("Attack");
+        if (audioSource && attackSound) audioSource.PlayOneShot(attackSound,3.0f);
 
         // 2. ���� ���� ��� (�÷��̾� ��ġ + offset ��ġ�� �簢�� �׸�)
         Vector2 attackPos = (Vector2)transform.position + offset;
