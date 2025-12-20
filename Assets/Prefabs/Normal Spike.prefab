@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4866035655521338609}
   - component: {fileID: 8141090365016617121}
   - component: {fileID: 4998895428055579454}
-  - component: {fileID: 3853508426746456521}
+  - component: {fileID: 2957335204818550071}
   m_Layer: 7
   m_Name: Normal Spike
   m_TagString: Trap
@@ -134,7 +134,7 @@ PolygonCollider2D:
       - {x: -0.5, y: -0.28866667}
       - {x: 0.5, y: -0.28866667}
   m_UseDelaunayMesh: 0
---- !u!114 &3853508426746456521
+--- !u!114 &2957335204818550071
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -720,9 +720,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1479016797618649367, guid: d44c730732ea54947b658ccbc286ac73, type: 3}
+      - m_Target: {fileID: 11500000, guid: d12c4e1a6f9536c49a1034733af0acf6, type: 3}
         m_TargetAssemblyTypeName: ResultManager, Assembly-CSharp
-        m_MethodName: RestartGame
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

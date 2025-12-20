@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1116928386125741015}
-  - component: {fileID: 4682758519761428909}
+  - component: {fileID: 6198848148062165302}
   m_Layer: 0
   m_Name: BeatManager
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4682758519761428909
+--- !u!114 &6198848148062165302
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,6 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 277dc66d4763c0f41a05264df4b2865a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bpm: 160
+  _bpm: 120
   _audioSource: {fileID: 0}
   _intervals: []

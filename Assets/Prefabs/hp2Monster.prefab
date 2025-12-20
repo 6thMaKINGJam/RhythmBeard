@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 2740288158984981123}
   - component: {fileID: 2890208036089225350}
   - component: {fileID: 5450847339499209059}
-  - component: {fileID: 5460709988837529826}
   - component: {fileID: -3807548727356340460}
-  m_Layer: 0
+  - component: {fileID: 6175706743217941117}
+  m_Layer: 6
   m_Name: hp2Monster
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -132,22 +132,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &5460709988837529826
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6117244128346931424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ea4aafaa97d5b544959fcfebbeae685, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHp: 2
-  attackDamage: 2
-  hitSound: {fileID: 0}
-  hitEffect: {fileID: 0}
 --- !u!50 &-3807548727356340460
 Rigidbody2D:
   serializedVersion: 4
@@ -160,10 +144,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 3
+  m_Mass: 0.2
+  m_LinearDrag: 5
   m_AngularDrag: 0.05
-  m_GravityScale: 0
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -175,3 +159,21 @@ Rigidbody2D:
   m_SleepingMode: 0
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &6175706743217941117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6117244128346931424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ea4aafaa97d5b544959fcfebbeae685, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHp: 2
+  attackDamage: 1
+  deathKnockbackForce: 7
+  bumpKnockbackForce: 5
+  hitSound: {fileID: 0}
+  hitEffect: {fileID: 0}

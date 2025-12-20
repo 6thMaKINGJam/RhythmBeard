@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7295868235468853375}
   - component: {fileID: 455108594820260320}
   - component: {fileID: 8382683553683885594}
-  - component: {fileID: 6444903944257518866}
+  - component: {fileID: 1167131852085388059}
   m_Layer: 7
   m_Name: InstantDeath Spike
   m_TagString: Trap
@@ -134,7 +134,7 @@ PolygonCollider2D:
       - {x: -0.5, y: -0.28866667}
       - {x: 0.5, y: -0.28866667}
   m_UseDelaunayMesh: 0
---- !u!114 &6444903944257518866
+--- !u!114 &1167131852085388059
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

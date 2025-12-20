@@ -44,7 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9479e4f4d188d74e85a007f0410fcb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cloudPrefabs: []
+  cloudPrefabs:
+  - {fileID: 0}
   nearCloudCount: 8
   farCloudCount: 4
   spawnInterval: 15

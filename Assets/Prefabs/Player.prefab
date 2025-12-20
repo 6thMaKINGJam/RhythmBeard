@@ -11,10 +11,9 @@ GameObject:
   - component: {fileID: 7048193041716612974}
   - component: {fileID: 191921699941415428}
   - component: {fileID: 987379509636436937}
-  - component: {fileID: 1025391036125856303}
   - component: {fileID: 7099076905083683863}
-  - component: {fileID: 8182897503599787592}
-  - component: {fileID: 8275890048565165462}
+  - component: {fileID: 1432773242330115177}
+  - component: {fileID: 5537103430903490022}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -116,24 +115,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &1025391036125856303
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 495252692830665164}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30c57a9455197f549abb83a587b53c95, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bpm: 160
-  tilesPerBeat: 1
-  tileSize: 1
-  jumpHeight: 2
-  moveSpeed: 0
-  jumpVelocity: 0
 --- !u!61 &7099076905083683863
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -179,7 +160,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &8182897503599787592
+--- !u!114 &1432773242330115177
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -193,12 +174,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackRangeX: 1.5
   attackRangeY: 1
-  offset: {x: 1.25, y: 0}
+  offset: {x: 1, y: 0}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64
   damage: 1
---- !u!114 &8275890048565165462
+--- !u!114 &5537103430903490022
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -213,12 +194,9 @@ MonoBehaviour:
   maxHealth: 3
   currentHealth: 3
   isDead: 0
-  hearts:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  playerHeartUI: {fileID: 0}
+  resultManager: {fileID: 0}
+  movementScript: {fileID: 0}
   invincibleTime: 1
   hurtColor: {r: 1, g: 0, b: 0, a: 1}
   hitSound: {fileID: 0}
-  resultManager: {fileID: 1479016797618649367, guid: d44c730732ea54947b658ccbc286ac73, type: 3}
-  movementScript: {fileID: 1025391036125856303}

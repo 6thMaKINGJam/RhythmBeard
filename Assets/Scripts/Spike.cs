@@ -10,14 +10,8 @@ public class Spike : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            // 플레이어의 스크립트를 가져와 데미지를 입힘
-            // 예: other.GetComponent<PlayerHealth>().TakeDamage(damage);
-         
-            PlayerHeart player = other.GetComponent<PlayerHeart>();
-            if (player != null)
-            {
-                player.TakeDamage(damage); 
-             }
+            PlayerHealth health = other.GetComponent<PlayerHealth>();
+            if (health != null) health.TakeDamage(damage);
         }
     }
 }
