@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class Spike : MonoBehaviour
 {
-    // [Source: 80] ÀÏ¹İ °¡½Ã´Â 1, [Source: 81] Áï»ç °¡½Ã´Â 3~5·Î ÀÎ½ºÆåÅÍ¿¡¼­ ¼³Á¤ °¡´É
-    public int damage = 1;
+   public int damage = 1;
 
-    private void OnTriggerEnter2D(Collider2D other)
+   private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            PlayerHealth player = other.GetComponent<PlayerHealth>();
+            // í”Œë ˆì´ì–´ì˜ ìŠ¤í¬ë¦½íŠ¸ë¥¼ ê°€ì ¸ì™€ ë°ë¯¸ì§€ë¥¼ ì…í˜
+            // ì˜ˆ: other.GetComponent<PlayerHealth>().TakeDamage(damage);
+         
+            PlayerHeart player = other.GetComponent<PlayerHeart>();
             if (player != null)
             {
-                player.TakeDamage(damage);
-                Debug.Log($"°¡½Ã¿¡ Âñ¸²! µ¥¹ÌÁö: {damage}");
-            }
+                player.TakeDamage(damage); 
+             }
         }
     }
-
 }

@@ -3,60 +3,76 @@ using UnityEngine;
 public class Monster : MonoBehaviour
 {
     [Header("Settings")]
-    public int maxHp = 1; // ±âÈ¹¼­: »¡°£ ¸ó½ºÅÍ=1, ³ë¶õ ¸ó½ºÅÍ=2 [cite: 78, 79]
+    public int maxHp = 1; // ï¿½ï¿½È¹ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½=1, ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½=2 [cite: 78, 79]
     private int currentHp;
+    public int attackDamage = 1;
 
     [Header("Feedback")]
-    public AudioClip hitSound; // Å¸°ÝÀ½ [cite: 71]
-    public GameObject hitEffect; // Å¸°Ý ÀÌÆåÆ® (ÆÄÆ¼Å¬ µî)
+    public AudioClip hitSound; // Å¸ï¿½ï¿½ï¿½ï¿½ [cite: 71]
+    public GameObject hitEffect; // Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® (ï¿½ï¿½Æ¼Å¬ ï¿½ï¿½)
 
     private AudioSource audioSource;
+
+    private Rigidbody2D rb;
 
     void Start()
     {
         currentHp = maxHp;
-        audioSource = GetComponent<AudioSource>(); // ¾øÀ¸¸é Add Component ÇÊ¿ä
+        audioSource = GetComponent<AudioSource>(); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Add Component ï¿½Ê¿ï¿½
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    // ÇÃ·¹ÀÌ¾î°¡ È£ÃâÇÒ ÇÔ¼ö
-    public void TakeDamage(int damage)
+    // ï¿½Ã·ï¿½ï¿½Ì¾î°¡ È£ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
+    public void TakeDamage(int damage, Vector2 attackerPosition)
     {
         currentHp -= damage;
 
         if (audioSource && hitSound) audioSource.PlayOneShot(hitSound);
         if (hitEffect) Instantiate(hitEffect, transform.position, Quaternion.identity);
 
-        // ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ÀÖ´Ù¸é ¿©±â¼­ Æ®¸®°Å (¿¹: animator.SetTrigger("Hit"))
+        // ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ ï¿½ï¿½ï¿½â¼­ Æ®ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½: animator.SetTrigger("Hit"))
 
         if (currentHp <= 0)
         {
             Die();
         }
+        else
+        {
+            ApplyKnockback(attackerPosition);
+        }
+    }
+
+    public void ApplyKnockback(Vector2 playerPosition)
+    {
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        Vector2 knockbackDir = ((Vector2)transform.position - playerPosition).normalized;
+        rb.velocity = Vector2.zero;
+        rb.AddForce(knockbackDir * 5f, ForceMode2D.Impulse);
     }
 
     void Die()
     {
-        // ¸ó½ºÅÍ »ç¸Á Ã³¸® (Á¡¼ö Ãß°¡ µî ·ÎÁ÷ÀÌ ÀÖ´Ù¸é ¿©±â¿¡ Ãß°¡)
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ ï¿½ï¿½ï¿½â¿¡ ï¿½ß°ï¿½)
         Destroy(gameObject);
     }
 
-    // ±âÁ¸ Monster.cs ³»¿ë ¾Æ·¡¿¡ ÀÌ ÇÔ¼ö¸¦ Ãß°¡ÇÏ¼¼¿ä.
+    // ï¿½ï¿½ï¿½ï¿½ Monster.cs ï¿½ï¿½ï¿½ï¿½ ï¿½Æ·ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // [Source: 80] ´êÀ¸¸é ÇÇ°ÝµÇ´Â °¡½Ã / ¸ó½ºÅÍ °øÅë ·ÎÁ÷
+        // [Source: 80] ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç°ÝµÇ´ï¿½ ï¿½ï¿½ï¿½ï¿½ / ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (collision.CompareTag("Player"))
         {
             PlayerHealth playerHealth = collision.GetComponent<PlayerHealth>();
 
-            // ÇÃ·¹ÀÌ¾î Ã¼·Â ½ºÅ©¸³Æ®°¡ ÀÖ´Ù¸é µ¥¹ÌÁö ÁÖ±â
+            // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Ã¼ï¿½ï¿½ ï¿½ï¿½Å©ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö±ï¿½
             if (playerHealth != null)
             {
                 playerHealth.TakeDamage(1);
 
-                // ¼±ÅÃ »çÇ×: 
-                // ¸ó½ºÅÍ¶û ºÎµúÇûÀ» ¶§ ¸ó½ºÅÍ°¡ »ç¶óÁ®¾ß ÇÑ´Ù¸é: Destroy(gameObject);
-                // ¸ó½ºÅÍ´Â ±×´ë·Î ÀÖ°í ÇÃ·¹ÀÌ¾î¸¸ ¹«Àû »óÅÂ·Î Åë°úÇØ¾ß ÇÑ´Ù¸é: ¾Æ¹«°Íµµ ¾È ÇØµµ µÊ (PlayerHealth¿¡¼­ ¹«Àû Ã³¸®ÇÔ)
+                // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: 
+                // ï¿½ï¿½ï¿½Í¶ï¿½ ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ´Ù¸ï¿½: Destroy(gameObject);
+                // ï¿½ï¿½ï¿½Í´ï¿½ ï¿½×´ï¿½ï¿½ ï¿½Ö°ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î¸¸ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â·ï¿½ ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ ï¿½Ñ´Ù¸ï¿½: ï¿½Æ¹ï¿½ï¿½Íµï¿½ ï¿½ï¿½ ï¿½Øµï¿½ ï¿½ï¿½ (PlayerHealthï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½)
             }
         }
     }
