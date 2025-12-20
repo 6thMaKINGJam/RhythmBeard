@@ -22,13 +22,10 @@ public class PlayerHeart : MonoBehaviour
 
         if (currentHealth < 0) currentHealth = 0;
 
-        Debug.Log("플레이어 HP: " + currentHealth);
+        //Debug.Log("플레이어 HP: " + currentHealth);
         
-        UpdateUI();
-
         if (currentHealth <= 0)
         {
-            Debug.Log("게임 오버!");
             FindObjectOfType<ResultManager>().ShowResult();
         }
     }
@@ -63,6 +60,23 @@ public void ReduceHeart(int index)
         // 3. 하트 비활성화
         hearts[index].SetActive(false);
         Destroy(burst, 1f);
+    }
+}
+private void OnCollisionEnter2D(Collision2D collision)
+{
+   if (collision.gameObject.CompareTag("Monster"))
+    {
+        if (currentHealth > 0)
+        {
+            // 지워야 할 하트의 번호 (체력이 3이면 2번 하트, 2면 1번 하트 삭제)
+            int targetIndex = currentHealth - 1;
+
+            // 하트 터지는 효과 실행 (이 함수 안에서 하트가 SetActive(false) 됨)
+            ReduceHeart(targetIndex);
+
+            // 실제 체력 수치 감소
+            TakeDamage(1);
+        }
     }
 }
 }
