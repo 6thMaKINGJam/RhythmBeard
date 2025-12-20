@@ -76,6 +76,17 @@ public class PlayerHealth : MonoBehaviour
             rb.bodyType = RigidbodyType2D.Kinematic;
         }
 
+        // 3. [추가] 애니메이션 멈추기(얼음!)
+        // (만약 애니메이터가 자식 오브젝트에 있다면 GetComponentInChildren 사용)
+        Animator anim = GetComponent<Animator>();
+        if (anim == null) anim = GetComponentInChildren<Animator>();
+
+        if (anim != null)
+        {
+            anim.speed = 0; // 재생 속도를 0으로 하면 현재 동작에서 그대로 멈춥니다.
+            // 아예 끄고 싶다면: anim.enabled = false;
+        }
+
         AudioSource bgm = FindObjectOfType<AudioSource>();
         if (bgm != null) bgm.Stop();
 

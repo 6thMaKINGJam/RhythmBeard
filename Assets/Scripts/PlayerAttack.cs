@@ -18,7 +18,7 @@ public class PlayerAttack : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.RightShift))
+        if (Input.GetKeyDown(KeyCode.M))
         {
             Attack();
         }

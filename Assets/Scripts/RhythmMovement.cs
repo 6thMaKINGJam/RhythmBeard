@@ -55,14 +55,14 @@ public class RhythmMovement : MonoBehaviour
         // Idle 상태 없이 무조건 달립니다.
         rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
 
-        // 2. 점프 입력 (Space)
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        // 2. 점프 입력 (Z)
+        if (Input.GetKeyDown(KeyCode.Z) && isGrounded)
         {
             Jump();
         }
 
-        // 3. [수정] 공격 입력 (오른쪽 Shift)
-        if (Input.GetKeyDown(KeyCode.RightShift))
+        // 3. [수정] 공격 입력 (M)
+        if (Input.GetKeyDown(KeyCode.M))
         {
             if (anim != null)
             {

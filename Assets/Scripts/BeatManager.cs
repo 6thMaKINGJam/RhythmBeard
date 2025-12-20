@@ -17,6 +17,18 @@ public class BeatManager : MonoBehaviour
     private void Awake()
     {
         if (Instance == null) Instance = this;
+
+        // [추가] 오디오 소스가 연결되어 있다면 강제로 재생!
+        if (_audioSource != null)
+        {
+            _audioSource.Stop(); // 혹시 꼬였을까봐 한번 멈췄다가
+            _audioSource.Play(); // 다시 재생
+            Debug.Log("코드에서 강제로 음악을 재생했습니다!");
+        }
+        else
+        {
+            Debug.LogError("Audio Source가 연결되지 않았습니다!");
+        }
     }
 
     private void Update()
