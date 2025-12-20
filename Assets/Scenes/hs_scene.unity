@@ -1830,7 +1830,6 @@ MonoBehaviour:
   bpm: 160
   tilesPerBeat: 0.25
   tileSize: 1
-  jumpHeight: 2
   moveSpeed: 0
   jumpVelocity: 0
 --- !u!50 &1187729509
