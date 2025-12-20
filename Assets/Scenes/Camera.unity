@@ -327,8 +327,6 @@ MonoBehaviour:
   spawnInterval: 15
   minY: 4
   maxY: 7
-  cloudPool: []
-  lastSpawnX: 0
 --- !u!4 &482186437
 Transform:
   m_ObjectHideFlags: 0
@@ -709,41 +707,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fad408643c045924cbba32289cfe90fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cloudList: []
   phases:
   - phaseName: Day
     bgRenderer: {fileID: 536616590}
-    cloudColor:
-      r: 0.5137255
-      g: 0.6431373
-      b: 0.77254903
-      a: 1
+    cloudColor: {r: 0.5137255, g: 0.6431373, b: 0.77254903, a: 1}
   - phaseName: Sunset
     bgRenderer: {fileID: 577991902}
-    cloudColor:
-      r: 0.8490566
-      g: 0.46886122
-      b: 0
-      a: 1
+    cloudColor: {r: 0.8490566, g: 0.46886122, b: 0, a: 1}
   - phaseName: Night
     bgRenderer: {fileID: 144220625}
-    cloudColor:
-      r: 0.3868921
-      g: 0.5194927
-      b: 0.6679245
-      a: 1
+    cloudColor: {r: 0.3868921, g: 0.5194927, b: 0.6679245, a: 1}
   - phaseName: Dawn
     bgRenderer: {fileID: 1874856202}
-    cloudColor:
-      r: 0.6195727
-      g: 0.6472323
-      b: 0.6528301
-      a: 1
+    cloudColor: {r: 0.6195727, g: 0.6472323, b: 0.6528301, a: 1}
   cloudRenderers:
   - {fileID: 0}
   - {fileID: 0}
   fadeSpeed: 2
-  currentPhaseIndex: 0
 --- !u!4 &1003543636
 Transform:
   m_ObjectHideFlags: 0
