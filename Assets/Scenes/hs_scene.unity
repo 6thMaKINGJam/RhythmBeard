@@ -1830,6 +1830,7 @@ MonoBehaviour:
   bpm: 160
   tilesPerBeat: 0.25
   tileSize: 1
+  jumpHeight: 2
   moveSpeed: 0
   jumpVelocity: 0
 --- !u!50 &1187729509
@@ -1940,10 +1941,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 3
   currentHealth: 0
-  hearts:
-  - {fileID: 669807675}
-  - {fileID: 1595347945}
-  - {fileID: 210421223}
+  heartImages:
+  - {fileID: 669807677}
+  - {fileID: 1595347947}
+  - {fileID: 210421225}
+  fullHeart: {fileID: -1099110694, guid: a6502d36387d56549895062fd21693e6, type: 3}
+  emptyHeart: {fileID: 625858442, guid: a6502d36387d56549895062fd21693e6, type: 3}
   burstEffectPrefab: {fileID: 9188922444779119563, guid: 57aeb4d9e0719734fbf067706feb4007, type: 3}
 --- !u!1 &1218904250
 GameObject:

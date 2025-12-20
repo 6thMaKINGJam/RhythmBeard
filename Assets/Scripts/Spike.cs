@@ -16,7 +16,7 @@ public class Spike : MonoBehaviour
             PlayerHeart player = other.GetComponent<PlayerHeart>();
             if (player != null)
             {
-                player.TakeDamage(damage); 
+                player.HandleDamage(this.gameObject); 
              }
         }
     }

@@ -8,83 +8,129 @@ public class PlayerHeart : MonoBehaviour
     public int maxHealth = 3; 
     public int currentHealth;
 
-    public GameObject[] hearts;
-    public GameObject burstEffectPrefab; // [꼭 확인] 인스펙터에서 하늘색 프리팹을 연결해야 합니다.
+    [Header("하트 이미지 설정")]
+    public Image[] heartImages;    // Element 0:왼쪽, 1:가운데, 2:오른쪽 순서로 연결하세요.
+    public Sprite fullHeart;       
+    public Sprite emptyHeart;      
+    
+    [Header("효과 설정")]
+    public GameObject burstEffectPrefab; 
+
+    private bool isInvincible = false; // 무적 상태 변수
 
     void Start()
     {
         currentHealth = maxHealth;
-        for (int i = 0; i < hearts.Length; i++)
-    {
-        if (hearts[i] != null)
-            hearts[i].SetActive(true);
-    }
         UpdateUI();
     }
 
-    public void TakeDamage(int amount)
+    // --- 충돌 감지 부분 분리 ---
+
+    // 1. 일반 몬스터와 물리적 충돌 시
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        currentHealth -= amount;
-        if (currentHealth < 0) currentHealth = 0;
-        
-        // 중요: 체력이 0이 되었을 때 결과창 띄우기
-        if (currentHealth <= 0)
-        {
-            FindObjectOfType<ResultManager>().ShowResult();
-        }
+        HandleDamage(collision.gameObject);
     }
-   
-    void UpdateUI()
+
+    // 2. 스파이크(Is Trigger 체크됨)와 겹쳤을 때
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        for (int i = 0; i < hearts.Length; i++)
+        HandleDamage(collision.gameObject);
+    }
+
+    // 3. 공통 데미지 처리 로직
+    public void HandleDamage(GameObject enemy)
+    {
+        if (isInvincible) return; // 무적이면 무시
+
+        if (enemy.CompareTag("Monster"))
         {
-            // 현재 체력보다 낮은 인덱스의 하트만 켭니다.
-            hearts[i].SetActive(i < currentHealth);
+            Monster monster = enemy.GetComponent<Monster>();
+            int damageToTake = (monster != null) ? monster.attackDamage : 1;
+
+            if (monster != null) monster.ApplyKnockback(transform.position);
+
+            // 무적 시간 및 깜빡임 시작
+            StartCoroutine(InvincibilityRoutine());
+
+            // 데미지만큼 반복
+            for (int i = 0; i < damageToTake; i++)
+            {
+                if (currentHealth > 0)
+                {
+                    // [중요] 현재 남은 체력의 마지막 인덱스를 타겟으로 잡음
+                    int targetIndex = currentHealth - 1; 
+
+                    // 데이터 먼저 감소
+                    currentHealth--; 
+                    
+                    // 해당 인덱스의 하트 UI 연출 실행
+                    ReduceHeart(targetIndex);
+
+                    if (currentHealth <= 0)
+                    {
+                        FindObjectOfType<ResultManager>().ShowResult();
+                        break;
+                    }
+                }
+            }
         }
     }
 
     public void ReduceHeart(int index)
     {
-        // 인덱스 범위 확인 및 하트가 활성화 상태인지 체크
-    if (index >= 0 && index < hearts.Length && hearts[index].activeSelf)
+        if (index >= 0 && index < heartImages.Length)
+        {
+            GameObject burst = Instantiate(burstEffectPrefab, heartImages[index].transform.position, Quaternion.identity);
+            burst.transform.SetParent(heartImages[index].transform.parent);
+            burst.transform.localPosition = new Vector3(heartImages[index].transform.localPosition.x, heartImages[index].transform.localPosition.y, 0);
+            burst.transform.localScale = Vector3.one;
+            Destroy(burst, 1f);
+
+            StartCoroutine(BlinkAndChangeRoutine(index));
+        }
+    }
+
+    IEnumerator BlinkAndChangeRoutine(int index)
     {
-       
-        GameObject burst = Instantiate(burstEffectPrefab, hearts[index].transform.position, Quaternion.identity);
+        Image heartImg = heartImages[index];
+        float blinkSpeed = 0.1f;
+
+        heartImg.color = new Color(1, 1, 1, 0); 
+        yield return new WaitForSeconds(blinkSpeed);
         
-        burst.transform.SetParent(hearts[index].transform.parent);
+        heartImg.sprite = emptyHeart; 
+        heartImg.color = Color.white; 
+        yield return new WaitForSeconds(blinkSpeed);
 
-        burst.transform.localPosition = new Vector3(burst.transform.localPosition.x, burst.transform.localPosition.y, 0);
-        burst.transform.localScale = Vector3.one;
-
-        hearts[index].SetActive(false);
-
-        Destroy(burst, 1f);
+        heartImg.color = new Color(1, 1, 1, 0);
+        yield return new WaitForSeconds(blinkSpeed);
+        
+        heartImg.color = Color.white;
     }
-    }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    IEnumerator InvincibilityRoutine()
     {
-       if (collision.gameObject.CompareTag("Monster"))
-    {
-        Monster monster = collision.gameObject.GetComponent<Monster>();
-        int damageToTake = 1; // 기본값
-
-        if (monster != null)
+        isInvincible = true;
+        SpriteRenderer spr = GetComponent<SpriteRenderer>();
+        
+        // 1초 동안 캐릭터 깜빡임
+        for (int i = 0; i < 5; i++)
         {
-            damageToTake = monster.attackDamage; // 몬스터의 공격력을 가져옴
-            monster.ApplyKnockback(transform.position);
+            if(spr) spr.color = new Color(1, 1, 1, 0.5f);
+            yield return new WaitForSeconds(0.1f);
+            if(spr) spr.color = Color.white;
+            yield return new WaitForSeconds(0.1f);
         }
-
-        // 가져온 공격력 수치만큼 반복해서 하트를 터뜨림
-        for (int i = 0; i < damageToTake; i++)
-        {
-            if (currentHealth > 0)
-            {
-                int targetIndex = currentHealth - 1;
-                ReduceHeart(targetIndex); // 하트 이펙트
-                TakeDamage(1);            // 체력 감소
-            }
-        }
+        isInvincible = false;
     }
+
+    void UpdateUI()
+    {
+        for (int i = 0; i < heartImages.Length; i++)
+        {
+            heartImages[i].sprite = (i < currentHealth) ? fullHeart : emptyHeart;
+            heartImages[i].color = Color.white;
+        }
     }
 }
