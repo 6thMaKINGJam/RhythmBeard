@@ -145,6 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 2
+  attackDamage: 2
   knockbackForce: 7
   deathEffect: {fileID: 0}
 --- !u!50 &-3807548727356340460
