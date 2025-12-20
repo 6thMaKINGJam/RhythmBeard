@@ -17,19 +17,13 @@ public class BackGroundManager : SceneSingleton<BackGroundManager>
     private Dictionary<SpriteRenderer, Color> initialCloudColors = new Dictionary<SpriteRenderer, Color>();
 
     public BackgroundPhase[] phases;
-    public SpriteRenderer[] cloudRenderers; // 씬에 있는 모든 구름들
     public float fadeSpeed = 2.0f;
 
     private int currentPhaseIndex = 0;
 
     private void Start()
     {
-        // 시작할 때 각 구름의 고유한 색상을 저장해둡니다.
-        foreach (var cloud in cloudRenderers)
-        {
-            if (cloud != null)
-                RegisterCloud(cloud);
-        }
+        
     }
     private void Update()
     {
