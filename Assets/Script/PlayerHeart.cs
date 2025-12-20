@@ -47,4 +47,22 @@ public class PlayerHeart : MonoBehaviour
             }
         }
     }
+    public GameObject burstEffectPrefab;
+
+public void ReduceHeart(int index)
+{
+    if (hearts[index].activeSelf)
+    {
+      
+        GameObject burst = Instantiate(burstEffectPrefab, hearts[index].transform.position, Quaternion.identity);
+        
+        // 2. 파티클을 UI 레이어(Canvas)에 보이게 설정 (UI 하트일 경우 중요)
+        burst.transform.SetParent(hearts[index].transform.parent);
+        burst.transform.localScale = Vector3.one;
+
+        // 3. 하트 비활성화
+        hearts[index].SetActive(false);
+        Destroy(burst, 1f);
+    }
+}
 }
