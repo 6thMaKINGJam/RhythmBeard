@@ -9,6 +9,7 @@ public class RhythmMovement : MonoBehaviour
 
     [Header("Physics Settings")]
     public float tileSize = 1f; // 타일맵 그리드 사이즈 (보통 1)
+    public float jumpHeight = 2f; // 점프 높이를 직접 지정 (예: 2칸 높이)
 
     // 상태 확인용
     [SerializeField] private float moveSpeed;
@@ -32,11 +33,22 @@ public class RhythmMovement : MonoBehaviour
         float distancePerBeat = tilesPerBeat * tileSize;
         moveSpeed = distancePerBeat / secPerBeat;
 
-        // 3. Y축 점프 힘 계산 (정확히 1박자 뒤에 착지하도록)
-        // 공식: 초기속도 = (중력 * 시간) / 2
-        //  한 박에 딱 땅에 떨어져야 함
-        float gravity = Mathf.Abs(Physics2D.gravity.y * rb.gravityScale);
-        jumpVelocity = (gravity * secPerBeat) / 2f;
+        // 2. 중력과 점프 힘 재계산 (핵심 변경!)
+        // 목표: "BPM이 몇이든 무조건 jumpHeight만큼 뛰고, 정확히 1박자 뒤에 착지한다."
+
+        // 정점까지 걸리는 시간 = 총 체류시간의 절반
+        float timeToApex = secPerBeat / 2f;
+
+        // 물리 공식 역산:
+        // 중력(g) = (2 * 높이) / (시간^2)
+        float newGravity = (2 * jumpHeight) / (timeToApex * timeToApex);
+
+        // 점프 힘(v) = 중력 * 시간
+        jumpVelocity = newGravity * timeToApex;
+
+        // 3. 계산된 중력을 유니티 리지드바디에 적용
+        // 유니티 기본 중력(9.81)을 기준으로 배율(Scale)을 조절
+        rb.gravityScale = newGravity / 9.81f;
     }
 
     void Update()

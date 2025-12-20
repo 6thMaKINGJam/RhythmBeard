@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 1561428989745113486}
   - component: {fileID: 1589913622270627702}
   - component: {fileID: 5323660077559102793}
-  - component: {fileID: 7044775051206453156}
-  m_Layer: 0
+  - component: {fileID: 4210799473585081671}
+  m_Layer: 6
   m_Name: hp1Monster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -131,7 +131,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &7044775051206453156
+--- !u!114 &4210799473585081671
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -140,8 +140,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7600266078596540817}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7194a8fb1f03fb3429588728be38a289, type: 3}
+  m_Script: {fileID: 11500000, guid: 6ea4aafaa97d5b544959fcfebbeae685, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 1
-  deathEffect: {fileID: 0}
+  maxHp: 1
+  hitSound: {fileID: 0}
+  hitEffect: {fileID: 0}

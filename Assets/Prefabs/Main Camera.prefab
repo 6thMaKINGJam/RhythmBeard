@@ -105,7 +105,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fd4efbaca6d3f041927a73f37ccba71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerTransform: {fileID: 0}
+  playerTransform: {fileID: 7048193041716612974, guid: 9c4d16c713e86214ba8e92e390dfea1a, type: 3}
   offsetX: 5
   yOffset: 2
   ySmoothSpeed: 5

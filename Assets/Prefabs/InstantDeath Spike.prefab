@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 455108594820260320}
   - component: {fileID: 8382683553683885594}
   - component: {fileID: 6444903944257518866}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: InstantDeath Spike
-  m_TagString: Untagged
+  m_TagString: Trap
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
