@@ -38,7 +38,7 @@ public class PlayerHealth : MonoBehaviour
     {
         if (isDead || isInvincible) return;
 
-        if (audioSource && hitSound) audioSource.PlayOneShot(hitSound);
+        if (audioSource && hitSound) audioSource.PlayOneShot(hitSound, 5.0f);
 
         // 체력 감소
         currentHealth -= amount;

@@ -12,6 +12,8 @@ public class RhythmMovement : MonoBehaviour
     public float jumpHeight = 3f;
     public float jumpDistanceTiles = 4f;
 
+    public AudioClip jumpSound;
+
     // 상태 확인용
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpVelocity;
@@ -20,6 +22,7 @@ public class RhythmMovement : MonoBehaviour
 
     // [추가] 애니메이터 변수
     private Animator anim;
+    private AudioSource audioSource;
 
     void Start()
     {
@@ -29,6 +32,8 @@ public class RhythmMovement : MonoBehaviour
         anim = GetComponent<Animator>();
         // 만약 자식 오브젝트(Sprite)에 애니메이터가 있다면 아래 줄 주석 해제
         // if (anim == null) anim = GetComponentInChildren<Animator>();
+
+        audioSource = GetComponent<AudioSource>();
 
         CalculateMovementValues();
     }
@@ -84,6 +89,8 @@ public class RhythmMovement : MonoBehaviour
     {
         rb.velocity = new Vector2(rb.velocity.x, jumpVelocity);
         isGrounded = false;
+
+        if (audioSource && jumpSound) audioSource.PlayOneShot(jumpSound, 3.0f);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
