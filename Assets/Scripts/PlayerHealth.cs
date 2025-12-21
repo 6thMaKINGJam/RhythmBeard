@@ -43,16 +43,31 @@ public class PlayerHealth : MonoBehaviour
     {
         if (isDead || isInvincible) return;
 
-        // 카메라 쉐이크 (Action 스크립트가 있을 경우)
-        if (MainCamera_Action.Instance != null)
-        {
-            MainCamera_Action.Instance.PlayHitShake(0.2f, 0.2f);
-        }
-
-        if (audioSource && hitSound) audioSource.PlayOneShot(hitSound, 5.0f);
-
+        // 1. [순서 변경] 체력을 먼저 깎습니다. (죽었는지 살았는지 판단하기 위해)
         currentHealth -= amount;
         if (currentHealth < 0) currentHealth = 0;
+
+        // 2. [수정] 죽음 여부에 따라 카메라 쉐이크 강도 조절
+        if (MainCamera_Action.Instance != null)
+        {
+            if (currentHealth <= 0)
+            {
+                // [사망 시] 아주 강하고 길게 흔들기! 
+                // duration(시간): 0.5~1.0초 / magnitude(강도): 1.0f (일반 피격의 5배)
+                MainCamera_Action.Instance.PlayHitShake(0.75f, 0.4f);
+            }
+            else
+            {
+                // [일반 피격] 살짝 흔들기
+                MainCamera_Action.Instance.PlayHitShake(0.2f, 0.2f);
+            }
+        }
+
+        // 3. 효과음 재생 (사망 소리는 GameOver에서 따로 나므로 여기선 일반 피격음만)
+        if (currentHealth > 0 && audioSource && hitSound)
+        {
+            audioSource.PlayOneShot(hitSound, 6.0f);
+        }
 
         // UI 업데이트
         if (playerHeartUI != null)
