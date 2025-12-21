@@ -8,6 +8,10 @@ public class OpeningController : MonoBehaviour
     public GameObject startButton;          // [추가] 나중에 켜줄 버튼
     public string nextSceneName = "MainMenu"; // 이동할 씬 이름
 
+
+    [Header("Audio Settings")]
+    public AudioClip openingBGM;
+    private AudioSource openingSource;
     void OnEnable()
     {
         // 감독님 찾기 (혹시 연결 안 됐을까 봐 안전장치)
@@ -33,5 +37,9 @@ public class OpeningController : MonoBehaviour
     void OnDisable()
     {
         if (director != null) director.stopped -= ShowButton;
+    }
+    void Start()
+    {
+        openingSource = GetComponent<AudioSource>();
     }
 }

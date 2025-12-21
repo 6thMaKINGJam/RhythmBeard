@@ -5,9 +5,13 @@ public class EndingManager : MonoBehaviour
 {
     public GameObject restartButton; // 재시작 버튼을 연결할 변수
     public string mainSceneName = "MainScene"; // 이동할 메인 메뉴 씬의 정확한 이름
+    public AudioClip endingBGM;
+    private AudioSource endingSource;
 
     void Start()
     {
+
+        endingSource = GetComponent<AudioSource>();
         // 1. 게임 시작 시 버튼을 숨김
         if (restartButton != null)
         {
