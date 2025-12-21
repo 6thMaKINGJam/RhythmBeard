@@ -4,44 +4,50 @@ using UnityEngine.Events;
 
 public class BeatManager : MonoBehaviour
 {
-    public static BeatManager Instance; // 어디서든 접근 가능하게 싱글톤 처리
+    public static BeatManager Instance;
 
     [Header("Settings")]
     [SerializeField] private float _bpm = 120f;
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private List<Intervals> _intervals;
 
-    // 점프 앤 런 이동을 위해 현재 노래가 몇 박자만큼 진행됐는지 실수형으로 제공
     public float CurrentBeat { get; private set; }
+
+    // [추가] 음악이 시작되었는지 확인하는 변수
+    public bool IsMusicStarted { get; private set; } = false;
 
     private void Awake()
     {
         if (Instance == null) Instance = this;
 
-        // [추가] 오디오 소스가 연결되어 있다면 강제로 재생!
+        // [중요] 시작하자마자 재생되지 않도록 방지
         if (_audioSource != null)
         {
-            _audioSource.Stop(); // 혹시 꼬였을까봐 한번 멈췄다가
-            _audioSource.Play(); // 다시 재생
-            Debug.Log("코드에서 강제로 음악을 재생했습니다!");
+            _audioSource.Stop();
+            _audioSource.playOnAwake = false; // 코드로 확실하게 끕니다.
         }
-        else
+    }
+
+    // [추가] 외부(타일)에서 호출할 재생 함수
+    public void PlayMusic()
+    {
+        if (_audioSource != null && !IsMusicStarted)
         {
-            Debug.LogError("Audio Source가 연결되지 않았습니다!");
+            _audioSource.Play();
+            IsMusicStarted = true;
+            Debug.Log("Music Started by Trigger!");
         }
     }
 
     private void Update()
     {
-        // 오디오가 재생 중일 때만 계산
+        // 음악이 재생 중이 아니면 계산 중단
         if (!_audioSource.isPlaying) return;
 
-        // 1. 현재 박자 위치 계산 (전체 노래 기준)
-        // 공식: 현재샘플 / (샘플레이트 * (60/BPM)) = 현재까지 진행된 총 박자 수
+        // --- 기존 로직 유지 ---
         float samplesPerBeat = _audioSource.clip.frequency * (60f / _bpm);
         CurrentBeat = _audioSource.timeSamples / samplesPerBeat;
 
-        // 2. 각 인터벌(4분음표, 8분음표 등) 이벤트 체크
         foreach (var interval in _intervals)
         {
             interval.CheckForNewInterval(CurrentBeat);
