@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -615570584, guid: 629edd0798e36d149996122fd73d920e, type: 3}
+    - target: {fileID: 5323660077559102793, guid: 109088c518f547e42920fe5806aa7791, type: 3}
+      propertyPath: m_Size.x
+      value: 0.6
+      objectReference: {fileID: 0}
     - target: {fileID: 7600266078596540817, guid: 109088c518f547e42920fe5806aa7791, type: 3}
       propertyPath: m_Name
       value: 2_hp1Monster Variant
