@@ -18,7 +18,10 @@ public class PlayerHealth : MonoBehaviour
     public float invincibleTime = 1.0f;
     public Color hurtColor = Color.red;
     [Range(0f, 1f)] public float transparency = 0.5f; // [추가] 투명도 (0.5 = 반투명)
+
+    [Header("Audio")]
     public AudioClip hitSound;
+    public AudioClip deathSound; // [추가] 죽는 소리 파일 연결용
 
     // [중요] 몬스터 스크립트에서 무적 여부를 확인하기 위해 추가
     public bool IsInvincible { get { return isInvincible; } }
@@ -26,8 +29,6 @@ public class PlayerHealth : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
     private bool isInvincible = false;
-
-
 
     void Start()
     {
@@ -75,6 +76,13 @@ public class PlayerHealth : MonoBehaviour
     {
         if (isDead) return;
         isDead = true;
+
+        // 0. [추가] 사망 효과음 재생
+        // (BGM 끄기 전에 먼저 재생합니다)
+        if (audioSource && deathSound)
+        {
+            audioSource.PlayOneShot(deathSound, 2.0f); // 5.0f는 볼륨 증폭
+        }
 
         // 1. 즉시 멈춰야 할 것들
         if (movementScript != null) movementScript.enabled = false; // 이동 스크립트 중지
@@ -142,8 +150,9 @@ public class PlayerHealth : MonoBehaviour
         originalColor.a = 1f;
 
         if (isDead) {
-        // 죽었다면 회색으로 고정
-        spriteRenderer.color = new Color(0.4f, 0.4f, 0.4f, 1f); 
+
+            // 죽었다면 회색으로 고정
+            spriteRenderer.color = new Color(0.4f, 0.4f, 0.4f, 1f); 
         } 
         else {
             // 살았다면 원래 색으로 복구
