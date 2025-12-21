@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,17 +10,17 @@ public class PlayerHealth : MonoBehaviour
     public bool isDead = false;
 
     [Header("Ref Settings")]
-    public PlayerHeart playerHeartUI; // ¹æ±İ ¼öÁ¤ÇÑ UI ½ºÅ©¸³Æ® ¿¬°á
+    public PlayerHeart playerHeartUI; 
     public ResultManager resultManager;
     public RhythmMovement movementScript;
 
     [Header("Hit Feedback")]
     public float invincibleTime = 1.0f;
     public Color hurtColor = Color.red;
-    [Range(0f, 1f)] public float transparency = 0.5f; // [Ãß°¡] Åõ¸íµµ (0.5 = ¹İÅõ¸í)
+    [Range(0f, 1f)] public float transparency = 0.5f; // [ì¶”ê°€] íˆ¬ëª…ë„ (0.5 = ë°˜íˆ¬ëª…)
     public AudioClip hitSound;
 
-    // [Áß¿ä] ¸ó½ºÅÍ ½ºÅ©¸³Æ®¿¡¼­ ¹«Àû ¿©ºÎ¸¦ È®ÀÎÇÏ±â À§ÇØ Ãß°¡
+    // [ì¤‘ìš”] ëª¬ìŠ¤í„° ìŠ¤í¬ë¦½íŠ¸ì—ì„œ ë¬´ì  ì—¬ë¶€ë¥¼ í™•ì¸í•˜ê¸° ìœ„í•´ ì¶”ê°€
     public bool IsInvincible { get { return isInvincible; } }
 
     private SpriteRenderer spriteRenderer;
@@ -35,33 +35,36 @@ public class PlayerHealth : MonoBehaviour
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
 
-        // ½ÃÀÛ ½Ã ÇÏÆ® ²Ë Ã¤¿ì±â
         if (playerHeartUI != null) playerHeartUI.UpdateHearts(currentHealth);
     }
 
-    // ¸ó½ºÅÍ°¡ ¶§¸± ¶§ È£ÃâÇÏ´Â ÇÔ¼ö
     public void TakeDamage(int amount)
     {
         if (isDead || isInvincible) return;
 
+        // ì¹´ë©”ë¼ ì‰ì´í¬ (Action ìŠ¤í¬ë¦½íŠ¸ê°€ ìˆì„ ê²½ìš°)
+        if (MainCamera_Action.Instance != null)
+        {
+            MainCamera_Action.Instance.PlayHitShake(0.2f, 0.2f);
+        }
+
         if (audioSource && hitSound) audioSource.PlayOneShot(hitSound, 5.0f);
 
-        // Ã¼·Â °¨¼Ò
         currentHealth -= amount;
         if (currentHealth < 0) currentHealth = 0;
 
-        // [¼öÁ¤] ÆÄÆ¼Å¬ ¾øÀÌ, ±×³É ÇÏÆ® ±×¸²¸¸ °»½ÅÇÏ¶ó°í ¸í·É
+        // UI ì—…ë°ì´íŠ¸
         if (playerHeartUI != null)
         {
             playerHeartUI.UpdateHearts(currentHealth);
         }
 
-        Debug.Log("ÇÃ·¹ÀÌ¾î HP: " + currentHealth);
+        Debug.Log("í”Œë ˆì´ì–´ HP: " + currentHealth);
 
-        // ¹«Àû ½Ã°£ ½ÃÀÛ
+        // ë¬´ì  ë° ê¹œë¹¡ì„ íš¨ê³¼
         StartCoroutine(BlinkEffect());
 
-        // °ÔÀÓ ¿À¹ö
+        // ì‚¬ë§ íŒì •
         if (currentHealth <= 0)
         {
             GameOver();
@@ -73,30 +76,41 @@ public class PlayerHealth : MonoBehaviour
         if (isDead) return;
         isDead = true;
 
-        if (movementScript != null) movementScript.enabled = false;
+        // 1. ì¦‰ì‹œ ë©ˆì¶°ì•¼ í•  ê²ƒë“¤
+        if (movementScript != null) movementScript.enabled = false; // ì´ë™ ìŠ¤í¬ë¦½íŠ¸ ì¤‘ì§€
 
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (rb != null)
         {
-            rb.velocity = Vector2.zero;
-            rb.bodyType = RigidbodyType2D.Kinematic;
+            rb.velocity = Vector2.zero; // ë¬¼ë¦¬ì  ì†ë„ ì œê±°
+            rb.bodyType = RigidbodyType2D.Kinematic; // ë¬¼ë¦¬ ì˜í–¥ ì°¨ë‹¨
         }
 
-        // 3. [Ãß°¡] ¾Ö´Ï¸ŞÀÌ¼Ç ¸ØÃß±â(¾óÀ½!)
-        // (¸¸¾à ¾Ö´Ï¸ŞÀÌÅÍ°¡ ÀÚ½Ä ¿ÀºêÁ§Æ®¿¡ ÀÖ´Ù¸é GetComponentInChildren »ç¿ë)
+        // 2. ì• ë‹ˆë©”ì´ì…˜ ë©ˆì¶”ê¸°
         Animator anim = GetComponent<Animator>();
         if (anim == null) anim = GetComponentInChildren<Animator>();
-
         if (anim != null)
         {
-            anim.speed = 0; // Àç»ı ¼Óµµ¸¦ 0À¸·Î ÇÏ¸é ÇöÀç µ¿ÀÛ¿¡¼­ ±×´ë·Î ¸ØÃä´Ï´Ù.
-            // ¾Æ¿¹ ²ô°í ½Í´Ù¸é: anim.enabled = false;
+            anim.speed = 0; // ï¿½ï¿½ï¿½ ï¿½Óµï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Û¿ï¿½ï¿½ï¿½ ï¿½×´ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.
+            // ï¿½Æ¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Í´Ù¸ï¿½: anim.enabled = false;
         }
 
         AudioSource bgm = FindObjectOfType<AudioSource>();
         if (bgm != null) bgm.Stop();
 
-        if (resultManager != null) resultManager.ShowResult();
+        // 4. ê²°ê³¼ì°½ë§Œ 1.5ì´ˆ ë’¤ì— ë„ìš°ë„ë¡ ì½”ë£¨í‹´ ì‹œì‘
+        StartCoroutine(GameOverDelayRoutine(1.5f));
+    }
+
+    // ê²°ê³¼ì°½ ì§€ì—° ë…¸ì¶œ ì½”ë£¨í‹´
+    IEnumerator GameOverDelayRoutine(float delay)
+    {
+        yield return new WaitForSeconds(delay); // 1.5ì´ˆ ëŒ€ê¸°
+
+        if (resultManager != null)
+        {
+            resultManager.ShowResult(); // ê²°ê³¼ì°½ ì¶œë ¥
+        }
     }
 
     IEnumerator BlinkEffect()
@@ -105,27 +119,25 @@ public class PlayerHealth : MonoBehaviour
         Color originalColor = spriteRenderer.color;
         float timer = 0;
 
-        // Åõ¸íµµ°¡ Àû¿ëµÈ »ö»ó ¹Ì¸® ¸¸µé±â
+        // íˆ¬ëª…ë„ê°€ ì ìš©ëœ ìƒ‰ìƒ ë¯¸ë¦¬ ë§Œë“¤ê¸°
         Color transparentHurt = hurtColor;
-        transparentHurt.a = transparency; // »¡°£»ö + Åõ¸í
+        transparentHurt.a = transparency; // ë¹¨ê°„ìƒ‰ + íˆ¬ëª…
 
         Color transparentNormal = originalColor;
-        transparentNormal.a = transparency; // ¿ø·¡»ö + Åõ¸í
+        transparentNormal.a = transparency; // ì›ë˜ìƒ‰ + íˆ¬ëª…
 
         while (timer < invincibleTime)
         {
-            // 1. Åõ¸íÇÑ »¡°£»ö
+            // 1. íˆ¬ëª…í•œ ë¹¨ê°„ìƒ‰
             spriteRenderer.color = transparentHurt;
             yield return new WaitForSeconds(0.1f);
 
-            // 2. Åõ¸íÇÑ ¿ø·¡»ö
+            // 2. íˆ¬ëª…í•œ ì›ë˜ìƒ‰
             spriteRenderer.color = transparentNormal;
             yield return new WaitForSeconds(0.1f);
 
             timer += 0.2f;
         }
-        // ³¡³­ ÈÄ¿¡´Â ¿ÏÀü ºÒÅõ¸íÇÑ ¿ø·¡ »öÀ¸·Î º¹±Í
-        originalColor.a = 1f;
         spriteRenderer.color = originalColor;
         isInvincible = false;
     }

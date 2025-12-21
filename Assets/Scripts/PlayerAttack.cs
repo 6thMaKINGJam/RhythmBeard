@@ -40,6 +40,8 @@ public class PlayerAttack : MonoBehaviour
         // 3. �ش� ���� ���� ��� �ݶ��̴� ����
         Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(attackPos, boxSize, 0f, enemyLayer);
 
+        bool hitAnything = false;
+
         // 4. ������ ������ ������ ����
         foreach (Collider2D enemy in hitEnemies)
         {
@@ -48,6 +50,12 @@ public class PlayerAttack : MonoBehaviour
             {
                 monsterScript.TakeDamage(damage, (Vector2)gameObject.transform.position);
                 Debug.Log("���� Ÿ�� ����!");
+                hitAnything = true;
+            }
+
+            if (hitAnything && MainCamera_Action.Instance != null)
+            {
+                MainCamera_Action.Instance.PlayHitShake(0.2f, 0.1f);
             }
         }
     }
