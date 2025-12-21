@@ -1208,6 +1208,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3370383760600375947, guid: 9c4d16c713e86214ba8e92e390dfea1a, type: 3}
+      propertyPath: tilesPerBeat
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3370383760600375947, guid: 9c4d16c713e86214ba8e92e390dfea1a, type: 3}
+      propertyPath: jumpDistanceTiles
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5537103430903490022, guid: 9c4d16c713e86214ba8e92e390dfea1a, type: 3}
       propertyPath: playerHeartUI
       value: 
@@ -1219,7 +1227,7 @@ PrefabInstance:
     - target: {fileID: 5537103430903490022, guid: 9c4d16c713e86214ba8e92e390dfea1a, type: 3}
       propertyPath: movementScript
       value: 
-      objectReference: {fileID: 235907553}
+      objectReference: {fileID: 0}
     - target: {fileID: 6796641198353266938, guid: 9c4d16c713e86214ba8e92e390dfea1a, type: 3}
       propertyPath: jumpDistanceTiles
       value: 3
@@ -1275,72 +1283,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 495252692830665164, guid: 9c4d16c713e86214ba8e92e390dfea1a, type: 3}
-      insertIndex: 4
-      addedObject: {fileID: 235907553}
-    - targetCorrespondingSourceObject: {fileID: 495252692830665164, guid: 9c4d16c713e86214ba8e92e390dfea1a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 235907552}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c4d16c713e86214ba8e92e390dfea1a, type: 3}
 --- !u!4 &235907550 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7048193041716612974, guid: 9c4d16c713e86214ba8e92e390dfea1a, type: 3}
   m_PrefabInstance: {fileID: 235907549}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &235907551 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 495252692830665164, guid: 9c4d16c713e86214ba8e92e390dfea1a, type: 3}
-  m_PrefabInstance: {fileID: 235907549}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &235907552
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 235907551}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d600183f9da63b94483fd05e8d506735, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
---- !u!114 &235907553
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 235907551}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30c57a9455197f549abb83a587b53c95, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bpm: 130
-  tilesPerBeat: 3
-  tileSize: 1
-  jumpHeight: 3
-  jumpDistanceTiles: 3
-  useSync: 1
-  syncStrength: 5
-  jumpSound: {fileID: 0}
-  bgmSource: {fileID: 0}
-  stretchScale: {x: 0.7, y: 1.3}
-  squashScale: {x: 1.3, y: 0.7}
-  effectDuration: 0.2
-  jumpEffectPrefab: {fileID: 0}
-  landEffectPrefab: {fileID: 0}
-  effectOffset: {x: 0, y: -0.5, z: 0}
 --- !u!1001 &258639235
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -51232,9 +51181,41 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 547495815767787289, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 547495815767787289, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 547495815767787289, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 547495815767787289, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 839241208007609899, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 2438223674157021228, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2438223674157021228, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2438223674157021228, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2438223674157021228, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3505407224069674260, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
       propertyPath: m_Color.b
@@ -51391,6 +51372,22 @@ PrefabInstance:
     - target: {fileID: 7099401415429853823, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
       propertyPath: m_Color.r
       value: 0.9607844
+      objectReference: {fileID: 0}
+    - target: {fileID: 7207217819524144706, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7207217819524144706, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7207217819524144706, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7207217819524144706, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7226630590662258500, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
