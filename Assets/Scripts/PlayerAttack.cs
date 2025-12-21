@@ -53,7 +53,7 @@ public class PlayerAttack : MonoBehaviour
                 hitAnything = true;
             }
 
-            if (MainCamera_Action.Instance != null)
+            if (hitAnything && MainCamera_Action.Instance != null)
             {
                 MainCamera_Action.Instance.PlayHitShake(0.2f, 0.1f);
             }
