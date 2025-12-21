@@ -23,7 +23,7 @@ public class BackGroundManager : SceneSingleton<BackGroundManager>
 
     private void Start()
     {
-        
+        SetPhase(0);
     }
     private void Update()
     {
