@@ -1,5 +1,6 @@
 using UnityEngine;
-using System.Collections; // 코루틴 사용을 위해 필수
+using System.Collections;
+
 public class Monster : MonoBehaviour
 {
     [Header("Status")]
@@ -9,17 +10,23 @@ public class Monster : MonoBehaviour
 
     [Header("Knockback Settings")]
     public float deathKnockbackForce = 15f;
-
     public float bumpKnockbackForce = 5f;
 
     [Header("Feedback")]
     public AudioClip hitSound;
     public GameObject hitEffect;
 
+    [Header("Juice Settings (타격감)")] // [추가]
+    public Vector2 hitSquashScale = new Vector2(1.2f, 0.8f); // 맞았을 때 (옆으로 퍼짐)
+    public float hitDuration = 0.2f; // 원래대로 돌아오는 시간
+
     private AudioSource audioSource;
     private Rigidbody2D rb;
     private Collider2D col;
-    private SpriteRenderer spriteRenderer; // [추가] 색상을 바꾸기 위해 필요
+    private SpriteRenderer spriteRenderer;
+
+    private Vector3 originalScale; // [추가] 원래 크기 저장
+    private Coroutine hitRoutine;  // [추가] 중복 실행 방지용
 
     void Start()
     {
@@ -27,7 +34,10 @@ public class Monster : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>(); // [추가] 렌더러 가져오기
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+        // [추가] 시작 시 크기 저장
+        originalScale = transform.localScale;
     }
 
     // 1. 칼 공격 맞았을 때
@@ -38,15 +48,16 @@ public class Monster : MonoBehaviour
         if (audioSource && hitSound) audioSource.PlayOneShot(hitSound);
         if (hitEffect) Instantiate(hitEffect, transform.position, Quaternion.identity);
 
+        // [추가] 맞았으니까 찌그러짐 연출 실행!
+        PlayHitReaction();
+
         if (currentHp <= 0)
         {
-            // 체력 0됨 -> 사망 넉백 적용 후 죽음
             ApplyKnockback(attackerPosition, deathKnockbackForce);
             Die();
         }
         else
         {
-            // 체력 남음 -> 넉백 없음 (버팀)
             Debug.Log("몬스터가 공격을 버텼습니다.");
         }
     }
@@ -62,10 +73,11 @@ public class Monster : MonoBehaviour
             {
                 playerHealth.TakeDamage(attackDamage);
 
-                // [수정] 부딪히면 튕겨나가는 힘 적용
                 ApplyKnockback(collision.transform.position, bumpKnockbackForce);
 
-                // [추가] 몸통 박치기 후 몬스터도 죽어야(사라져야) 함!
+                // [추가] 부딪힐 때도 충격 느낌을 주기 위해 찌그러짐 실행
+                PlayHitReaction();
+
                 Die();
             }
         }
@@ -76,8 +88,6 @@ public class Monster : MonoBehaviour
         if (rb == null || rb.bodyType != RigidbodyType2D.Dynamic) return;
 
         Vector2 dir = ((Vector2)transform.position - targetPos).normalized;
-
-        // 대각선 위로 띄우는 비율을 0.5 -> 0.2로 줄임 (너무 붕 뜨지 않게)
         Vector2 finalDir = (dir + Vector2.up * 0.2f).normalized;
 
         rb.velocity = Vector2.zero;
@@ -86,32 +96,57 @@ public class Monster : MonoBehaviour
 
     void Die()
     {
-        // 충돌을 즉시 꺼서 플레이어가 지나갈 수 있게 함
         if (col != null) col.enabled = false;
-
-        // 2. [변경] 그냥 삭제하지 않고, 서서히 사라지는 연출 시작
         StartCoroutine(FadeOutAndDestroy());
     }
 
-    // [추가된 기능] 서서히 투명해지는 함수
     IEnumerator FadeOutAndDestroy()
     {
-        float duration = 0.4f; // 사라지는 데 걸리는 시간 (1초)
+        float duration = 0.4f;
         float timer = 0f;
         Color startColor = spriteRenderer.color;
 
         while (timer < duration)
         {
             timer += Time.deltaTime;
-            float alpha = Mathf.Lerp(1f, 0f, timer / duration); // 1(불투명) -> 0(투명)으로 변환
-
-            // 색상의 알파값(투명도)만 변경
+            float alpha = Mathf.Lerp(1f, 0f, timer / duration);
             spriteRenderer.color = new Color(startColor.r, startColor.g, startColor.b, alpha);
-
-            yield return null; // 한 프레임 대기
+            yield return null;
         }
 
-        // 완전히 투명해지면 삭제
         Destroy(gameObject);
+    }
+
+    // [추가] 몬스터가 맞았을 때 실행할 스쿼시 연출 함수
+    void PlayHitReaction()
+    {
+        if (hitRoutine != null) StopCoroutine(hitRoutine);
+        hitRoutine = StartCoroutine(CoHitSquash());
+    }
+
+    // [추가] 실제로 크기를 조절하는 코루틴
+    IEnumerator CoHitSquash()
+    {
+        // 1. 순식간에 찌그러짐 (Squash)
+        // 몬스터가 왼쪽/오른쪽을 보고 있을 수 있으므로(X축 반전 등) 절대값 대신 비율을 곱합니다.
+        Vector3 targetScale = new Vector3(
+            originalScale.x * hitSquashScale.x,
+            originalScale.y * hitSquashScale.y,
+            1f
+        );
+
+        transform.localScale = targetScale;
+
+        float elapsed = 0f;
+
+        // 2. 부드럽게 원래 크기로 복구
+        while (elapsed < hitDuration)
+        {
+            elapsed += Time.deltaTime;
+            transform.localScale = Vector3.Lerp(targetScale, originalScale, elapsed / hitDuration);
+            yield return null;
+        }
+
+        transform.localScale = originalScale;
     }
 }

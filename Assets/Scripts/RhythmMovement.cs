@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections; // 코루틴 사용을 위해 필수
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class RhythmMovement : MonoBehaviour
@@ -16,6 +17,14 @@ public class RhythmMovement : MonoBehaviour
     public AudioClip jumpSound;
     public AudioSource bgmSource;
 
+    [Header("Juice Settings (타격감)")]
+    public Vector2 stretchScale = new Vector2(0.7f, 1.3f); // 점프할 때 (홀쭉)
+    public Vector2 squashScale = new Vector2(1.3f, 0.7f);  // 착지할 때 (납작)
+    public float effectDuration = 0.2f; // 원래대로 돌아오는 데 걸리는 시간
+
+    private Vector3 originalScale; // 원래 크기 저장용
+    private Coroutine squeezeCoroutine; // 실행 중인 효과를 제어하기 위한 변수
+
     // 상태 확인용
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpVelocity;
@@ -32,8 +41,9 @@ public class RhythmMovement : MonoBehaviour
 
         // [추가] 애니메이터 컴포넌트 찾아오기
         anim = GetComponent<Animator>();
-        // 만약 자식 오브젝트(Sprite)에 애니메이터가 있다면 아래 줄 주석 해제
-        // if (anim == null) anim = GetComponentInChildren<Animator>();
+
+        // [추가] 시작 시 캐릭터의 원래 크기를 저장합니다.
+        originalScale = transform.localScale;
 
         sfxAudioSource = GetComponent<AudioSource>();
 
@@ -106,6 +116,9 @@ public class RhythmMovement : MonoBehaviour
         rb.velocity = new Vector2(rb.velocity.x, jumpVelocity);
         isGrounded = false;
 
+        // [추가] 점프 시 스트레치(Stretch) 효과 발동
+        ApplySquashStretch(stretchScale.x, stretchScale.y);
+
         if (sfxAudioSource && jumpSound) sfxAudioSource.PlayOneShot(jumpSound, 3.0f);
     }
 
@@ -115,5 +128,42 @@ public class RhythmMovement : MonoBehaviour
         {
             isGrounded = true;
         }
+
+        // [수정] 착지 시 스쿼시(Squash) 효과 발동
+        // 공중에 있다가 땅에 닿았을 때만 발동하도록 체크
+        if (!isGrounded)
+        {
+            ApplySquashStretch(squashScale.x, squashScale.y);
+        }
+        isGrounded = true;
+    }
+
+    // [신규 기능] 캐릭터를 찌그러트렸다가 원래대로 복구하는 코루틴
+    void ApplySquashStretch(float targetX, float targetY)
+    {
+        // 이미 효과가 실행 중이라면 취소하고 새로 시작 (중복 방지)
+        if (squeezeCoroutine != null) StopCoroutine(squeezeCoroutine);
+        squeezeCoroutine = StartCoroutine(CoSquashStretch(targetX, targetY));
+    }
+
+    IEnumerator CoSquashStretch(float targetXMult, float targetYMult)
+    {
+        // 1. 순간적으로 목표 크기(찌그러진 상태)로 변경
+        Vector3 targetScale = new Vector3(originalScale.x * targetXMult, originalScale.y * targetYMult, 1f);
+        transform.localScale = targetScale;
+
+        float elapsed = 0f;
+
+        // 2. 지정된 시간(effectDuration) 동안 원래 크기로 부드럽게 복구
+        while (elapsed < effectDuration)
+        {
+            elapsed += Time.deltaTime;
+            // Lerp를 사용하여 서서히 originalScale로 돌아옴
+            transform.localScale = Vector3.Lerp(targetScale, originalScale, elapsed / effectDuration);
+            yield return null;
+        }
+
+        // 3. 확실하게 원래 크기로 고정
+        transform.localScale = originalScale;
     }
 }

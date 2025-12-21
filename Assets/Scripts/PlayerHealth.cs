@@ -17,11 +17,17 @@ public class PlayerHealth : MonoBehaviour
     [Header("Hit Feedback")]
     public float invincibleTime = 1.0f;
     public Color hurtColor = Color.red;
+    [Range(0f, 1f)] public float transparency = 0.5f; // [추가] 투명도 (0.5 = 반투명)
     public AudioClip hitSound;
+
+    // [중요] 몬스터 스크립트에서 무적 여부를 확인하기 위해 추가
+    public bool IsInvincible { get { return isInvincible; } }
 
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
     private bool isInvincible = false;
+
+
 
     void Start()
     {
@@ -99,14 +105,27 @@ public class PlayerHealth : MonoBehaviour
         Color originalColor = spriteRenderer.color;
         float timer = 0;
 
+        // 투명도가 적용된 색상 미리 만들기
+        Color transparentHurt = hurtColor;
+        transparentHurt.a = transparency; // 빨간색 + 투명
+
+        Color transparentNormal = originalColor;
+        transparentNormal.a = transparency; // 원래색 + 투명
+
         while (timer < invincibleTime)
         {
-            spriteRenderer.color = hurtColor;
+            // 1. 투명한 빨간색
+            spriteRenderer.color = transparentHurt;
             yield return new WaitForSeconds(0.1f);
-            spriteRenderer.color = originalColor;
+
+            // 2. 투명한 원래색
+            spriteRenderer.color = transparentNormal;
             yield return new WaitForSeconds(0.1f);
+
             timer += 0.2f;
         }
+        // 끝난 후에는 완전 불투명한 원래 색으로 복귀
+        originalColor.a = 1f;
         spriteRenderer.color = originalColor;
         isInvincible = false;
     }
