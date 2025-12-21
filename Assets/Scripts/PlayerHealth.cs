@@ -10,7 +10,7 @@ public class PlayerHealth : MonoBehaviour
     public bool isDead = false;
 
     [Header("Ref Settings")]
-    public PlayerHeart playerHeartUI; // ¹æ±Ý ¼öÁ¤ÇÑ UI ½ºÅ©¸³Æ® ¿¬°á
+    public PlayerHeart playerHeartUI; // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ UI ï¿½ï¿½Å©ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
     public ResultManager resultManager;
     public RhythmMovement movementScript;
 
@@ -29,33 +29,38 @@ public class PlayerHealth : MonoBehaviour
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
 
-        // ½ÃÀÛ ½Ã ÇÏÆ® ²Ë Ã¤¿ì±â
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Æ® ï¿½ï¿½ Ã¤ï¿½ï¿½ï¿½
         if (playerHeartUI != null) playerHeartUI.UpdateHearts(currentHealth);
     }
 
-    // ¸ó½ºÅÍ°¡ ¶§¸± ¶§ È£ÃâÇÏ´Â ÇÔ¼ö
+    // ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
     public void TakeDamage(int amount)
     {
         if (isDead || isInvincible) return;
 
+        if (MainCamera_Action.Instance != null)
+        {
+            MainCamera_Action.Instance.PlayHitShake(0.2f, 0.2f);
+        }
+
         if (audioSource && hitSound) audioSource.PlayOneShot(hitSound, 5.0f);
 
-        // Ã¼·Â °¨¼Ò
+        // Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         currentHealth -= amount;
         if (currentHealth < 0) currentHealth = 0;
 
-        // [¼öÁ¤] ÆÄÆ¼Å¬ ¾øÀÌ, ±×³É ÇÏÆ® ±×¸²¸¸ °»½ÅÇÏ¶ó°í ¸í·É
+        // [ï¿½ï¿½ï¿½ï¿½] ï¿½ï¿½Æ¼Å¬ ï¿½ï¿½ï¿½ï¿½, ï¿½×³ï¿½ ï¿½ï¿½Æ® ï¿½×¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¶ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (playerHeartUI != null)
         {
             playerHeartUI.UpdateHearts(currentHealth);
         }
 
-        Debug.Log("ÇÃ·¹ÀÌ¾î HP: " + currentHealth);
+        Debug.Log("ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ HP: " + currentHealth);
 
-        // ¹«Àû ½Ã°£ ½ÃÀÛ
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
         StartCoroutine(BlinkEffect());
 
-        // °ÔÀÓ ¿À¹ö
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (currentHealth <= 0)
         {
             GameOver();
@@ -76,15 +81,15 @@ public class PlayerHealth : MonoBehaviour
             rb.bodyType = RigidbodyType2D.Kinematic;
         }
 
-        // 3. [Ãß°¡] ¾Ö´Ï¸ÞÀÌ¼Ç ¸ØÃß±â(¾óÀ½!)
-        // (¸¸¾à ¾Ö´Ï¸ÞÀÌÅÍ°¡ ÀÚ½Ä ¿ÀºêÁ§Æ®¿¡ ÀÖ´Ù¸é GetComponentInChildren »ç¿ë)
+        // 3. [ï¿½ß°ï¿½] ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ß±ï¿½(ï¿½ï¿½ï¿½ï¿½!)
+        // (ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ GetComponentInChildren ï¿½ï¿½ï¿½)
         Animator anim = GetComponent<Animator>();
         if (anim == null) anim = GetComponentInChildren<Animator>();
 
         if (anim != null)
         {
-            anim.speed = 0; // Àç»ý ¼Óµµ¸¦ 0À¸·Î ÇÏ¸é ÇöÀç µ¿ÀÛ¿¡¼­ ±×´ë·Î ¸ØÃä´Ï´Ù.
-            // ¾Æ¿¹ ²ô°í ½Í´Ù¸é: anim.enabled = false;
+            anim.speed = 0; // ï¿½ï¿½ï¿½ ï¿½Óµï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Û¿ï¿½ï¿½ï¿½ ï¿½×´ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.
+            // ï¿½Æ¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Í´Ù¸ï¿½: anim.enabled = false;
         }
 
         AudioSource bgm = FindObjectOfType<AudioSource>();
