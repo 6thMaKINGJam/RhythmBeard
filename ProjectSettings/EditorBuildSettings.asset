@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ksy-test.unity
     guid: df8cb238dfcee37439bd1ebf6d9f1d7f
+  - enabled: 1
+    path: Assets/Scenes/EndingScene.unity
+    guid: c2cb4049213a09a4bb4314ea76716c1f
   m_configObjects: {}
