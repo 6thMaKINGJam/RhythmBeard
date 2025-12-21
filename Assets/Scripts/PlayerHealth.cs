@@ -96,7 +96,7 @@ public class PlayerHealth : MonoBehaviour
         // (BGM 끄기 전에 먼저 재생합니다)
         if (audioSource && deathSound)
         {
-            audioSource.PlayOneShot(deathSound, 2.0f); // 5.0f는 볼륨 증폭
+            audioSource.PlayOneShot(deathSound, 1.0f); // 5.0f는 볼륨 증폭
         }
 
         // 1. 즉시 멈춰야 할 것들
