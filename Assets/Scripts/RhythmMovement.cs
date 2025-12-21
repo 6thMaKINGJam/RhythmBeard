@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections; // 코루틴 사용을 위해 필수
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class RhythmMovement : MonoBehaviour
@@ -13,39 +13,45 @@ public class RhythmMovement : MonoBehaviour
     public float jumpHeight = 3f;
     public float jumpDistanceTiles = 4f;
 
+    [Header("Sync Settings (동기화)")]
+    public bool useSync = true; // 동기화 기능 켜기/끄기
+    [Tooltip("오차를 얼마나 강하게 보정할지 (높을수록 팍팍 움직임)")]
+    public float syncStrength = 5f;
+
     [Header("Audio Settings")]
     public AudioClip jumpSound;
     public AudioSource bgmSource;
 
-    [Header("Juice Settings (타격감)")]
-    public Vector2 stretchScale = new Vector2(0.7f, 1.3f); // 점프할 때 (홀쭉)
-    public Vector2 squashScale = new Vector2(1.3f, 0.7f);  // 착지할 때 (납작)
-    public float effectDuration = 0.2f; // 원래대로 돌아오는 데 걸리는 시간
+    [Header("Juice & FX")]
+    public Vector2 stretchScale = new Vector2(0.7f, 1.3f);
+    public Vector2 squashScale = new Vector2(1.3f, 0.7f);
+    public float effectDuration = 0.2f;
+    public GameObject jumpEffectPrefab;
+    public GameObject landEffectPrefab;
+    public Vector3 effectOffset = new Vector3(0, -0.5f, 0);
 
-    private Vector3 originalScale; // 원래 크기 저장용
-    private Coroutine squeezeCoroutine; // 실행 중인 효과를 제어하기 위한 변수
-
-    // 상태 확인용
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float jumpVelocity;
+    // 내부 변수
+    private Vector3 originalScale;
+    private Coroutine squeezeCoroutine;
+    private float baseSpeed; // 기준 속도
+    private float jumpVelocity;
     private bool isGrounded;
-    private Rigidbody2D rb;
+    private bool isFirstLanding = true;
 
-    // 애니메이터 변수
+    // [중요] 동기화를 위한 시작 위치 저장용
+    private float startXPosition;
+    private bool hasMusicStarted = false;
+
+    private Rigidbody2D rb;
     private Animator anim;
-    private AudioSource sfxAudioSource; // 효과음용
+    private AudioSource sfxAudioSource;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-
-        // [추가] 애니메이터 컴포넌트 찾아오기
         anim = GetComponent<Animator>();
-
-        // [추가] 시작 시 캐릭터의 원래 크기를 저장합니다.
-        originalScale = transform.localScale;
-
         sfxAudioSource = GetComponent<AudioSource>();
+        originalScale = transform.localScale;
 
         CalculateMovementValues();
     }
@@ -54,116 +60,128 @@ public class RhythmMovement : MonoBehaviour
     {
         float secPerBeat = 60f / bpm;
         float distancePerBeat = tilesPerBeat * tileSize;
-        moveSpeed = distancePerBeat / secPerBeat;
+
+        // 이것이 이론상 완벽한 속도
+        baseSpeed = distancePerBeat / secPerBeat;
 
         float beatsForJump = jumpDistanceTiles / tilesPerBeat;
         float totalAirTime = secPerBeat * beatsForJump;
         float timeToApex = totalAirTime / 2f;
         float newGravity = (2 * jumpHeight) / (timeToApex * timeToApex);
+
         jumpVelocity = newGravity * timeToApex;
         rb.gravityScale = newGravity / 9.81f;
-
-        Debug.Log($"점프 설정: {jumpDistanceTiles}칸 점프");
     }
 
     void Update()
     {
-        // [핵심 로직] 배경음악이 아직 시작 안 했으면 움직이지 않음
-        // bgmSource가 연결되어 있고, 아직 플레이 중이 아니라면 대기
-        if (bgmSource != null && !bgmSource.isPlaying)
+        // 1. 음악 시작 체크 (타일 밟아서 시작된 순간을 포착)
+        if (bgmSource != null && bgmSource.isPlaying)
         {
-            // X축 속도는 0, Y축(중력)은 유지 (공중에 떠서 시작할 수도 있으니까)
-            rb.velocity = new Vector2(0, rb.velocity.y);
+            if (!hasMusicStarted)
+            {
+                // 노래가 딱 켜진 순간의 내 위치를 기준점으로 삼음
+                hasMusicStarted = true;
+                startXPosition = transform.position.x;
 
-            // 애니메이션도 멈춰있게 하려면 속도 0 (선택사항)
-            if (anim != null) anim.speed = 0;
-
-            return; // 아래 코드는 실행 안 하고 여기서 Update 종료!
+                // [보정] 노래가 0초가 아니라 0.05초 등에서 시작했을 수도 있으므로 역산
+                startXPosition -= bgmSource.time * baseSpeed;
+            }
+        }
+        else
+        {
+            // 노래 안 나오면 그냥 리셋
+            hasMusicStarted = false;
         }
 
-        // --- 노래가 시작되면 아래 코드가 실행됨 ---
+        // 2. 이동 로직 (동기화 적용)
+        float currentSpeed = baseSpeed;
 
-        // 애니메이션 다시 재생 (위에서 멈췄을 경우)
+        if (useSync && hasMusicStarted && bgmSource != null)
+        {
+            // A. 현재 음악 시간 기준, 내가 '있어야 할 X 좌표' 계산
+            // 공식: 시작위치 + (지금까지흐른시간 * 속도)
+            float songTime = bgmSource.time;
+            float targetX = startXPosition + (songTime * baseSpeed);
+
+            // B. 실제 내 위치와의 오차 계산
+            float currentX = transform.position.x;
+            float error = targetX - currentX;
+
+            // C. 오차만큼 속도를 더하거나 뺌 (P-Controller 방식)
+            // 뒤쳐졌으면(error > 0) 빨라지고, 앞서갔으면(error < 0) 느려짐
+            currentSpeed += error * syncStrength;
+        }
+
+        // 최종 속도 적용
+        rb.velocity = new Vector2(currentSpeed, rb.velocity.y);
+
+
+        // --- 이하 점프 및 FX 로직 동일 ---
+
         if (anim != null) anim.speed = 1;
 
-        // 1. 앞으로 계속 달리기
-        rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
-
-        // 2. 점프 입력 (Z)
         if (Input.GetKeyDown(KeyCode.Z) && isGrounded)
         {
             Jump();
         }
 
-        // 3. 공격 입력 (M)
         if (Input.GetKeyDown(KeyCode.M))
         {
-            if (anim != null)
-            {
-                anim.SetTrigger("Attack"); // 애니메이터에 'Attack' 신호 보냄
-            }
+            if (anim != null) anim.SetTrigger("Attack");
         }
 
-        // 4. [추가] 애니메이터에 땅에 닿았는지 알려주기 (점프 모션용)
-        if (anim != null)
-        {
-            anim.SetBool("IsGrounded", isGrounded);
-        }
+        if (anim != null) anim.SetBool("IsGrounded", isGrounded);
     }
 
     void Jump()
     {
-        rb.velocity = new Vector2(rb.velocity.x, jumpVelocity);
         isGrounded = false;
-
-        // [추가] 점프 시 스트레치(Stretch) 효과 발동
-        ApplySquashStretch(stretchScale.x, stretchScale.y);
+        rb.velocity = new Vector2(rb.velocity.x, jumpVelocity);
 
         if (sfxAudioSource && jumpSound) sfxAudioSource.PlayOneShot(jumpSound, 3.0f);
+        if (jumpEffectPrefab) Instantiate(jumpEffectPrefab, transform.position + effectOffset, Quaternion.identity);
+        ApplySquashStretch(stretchScale.x, stretchScale.y);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
+            if (isFirstLanding)
+            {
+                isFirstLanding = false;
+                isGrounded = true;
+                return;
+            }
+
+            if (!isGrounded)
+            {
+                if (landEffectPrefab) Instantiate(landEffectPrefab, transform.position + effectOffset, Quaternion.identity);
+                ApplySquashStretch(squashScale.x, squashScale.y);
+            }
             isGrounded = true;
         }
-
-        // [수정] 착지 시 스쿼시(Squash) 효과 발동
-        // 공중에 있다가 땅에 닿았을 때만 발동하도록 체크
-        if (!isGrounded)
-        {
-            ApplySquashStretch(squashScale.x, squashScale.y);
-        }
-        isGrounded = true;
     }
 
-    // [신규 기능] 캐릭터를 찌그러트렸다가 원래대로 복구하는 코루틴
     void ApplySquashStretch(float targetX, float targetY)
     {
-        // 이미 효과가 실행 중이라면 취소하고 새로 시작 (중복 방지)
         if (squeezeCoroutine != null) StopCoroutine(squeezeCoroutine);
         squeezeCoroutine = StartCoroutine(CoSquashStretch(targetX, targetY));
     }
 
     IEnumerator CoSquashStretch(float targetXMult, float targetYMult)
     {
-        // 1. 순간적으로 목표 크기(찌그러진 상태)로 변경
         Vector3 targetScale = new Vector3(originalScale.x * targetXMult, originalScale.y * targetYMult, 1f);
         transform.localScale = targetScale;
 
         float elapsed = 0f;
-
-        // 2. 지정된 시간(effectDuration) 동안 원래 크기로 부드럽게 복구
         while (elapsed < effectDuration)
         {
             elapsed += Time.deltaTime;
-            // Lerp를 사용하여 서서히 originalScale로 돌아옴
             transform.localScale = Vector3.Lerp(targetScale, originalScale, elapsed / effectDuration);
             yield return null;
         }
-
-        // 3. 확실하게 원래 크기로 고정
         transform.localScale = originalScale;
     }
 }
