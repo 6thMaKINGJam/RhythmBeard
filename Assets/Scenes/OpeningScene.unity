@@ -154,6 +154,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3976220719362622240, guid: 5cb1e9f25fd7bab41a444a51865bf96e, type: 3}
+      propertyPath: m_EffectColor.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3976220719362622240, guid: 5cb1e9f25fd7bab41a444a51865bf96e, type: 3}
+      propertyPath: m_EffectColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3976220719362622240, guid: 5cb1e9f25fd7bab41a444a51865bf96e, type: 3}
+      propertyPath: m_EffectColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3976220719362622240, guid: 5cb1e9f25fd7bab41a444a51865bf96e, type: 3}
+      propertyPath: m_EffectColor.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5094138661901315146, guid: 5cb1e9f25fd7bab41a444a51865bf96e, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -182,6 +198,26 @@ PrefabInstance:
       propertyPath: m_WrapMode
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 5907581039477703781, guid: 5cb1e9f25fd7bab41a444a51865bf96e, type: 3}
+      propertyPath: m_SceneBindings.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5907581039477703781, guid: 5cb1e9f25fd7bab41a444a51865bf96e, type: 3}
+      propertyPath: m_SceneBindings.Array.data[2].key
+      value: 
+      objectReference: {fileID: 1560422202561718311, guid: 62c52eb1ac9d88e45b644d085a461a20, type: 2}
+    - target: {fileID: 5907581039477703781, guid: 5cb1e9f25fd7bab41a444a51865bf96e, type: 3}
+      propertyPath: m_SceneBindings.Array.data[3].key
+      value: 
+      objectReference: {fileID: 8176160619828353430, guid: 62c52eb1ac9d88e45b644d085a461a20, type: 2}
+    - target: {fileID: 5907581039477703781, guid: 5cb1e9f25fd7bab41a444a51865bf96e, type: 3}
+      propertyPath: m_SceneBindings.Array.data[2].value
+      value: 
+      objectReference: {fileID: 226895672}
+    - target: {fileID: 5907581039477703781, guid: 5cb1e9f25fd7bab41a444a51865bf96e, type: 3}
+      propertyPath: m_SceneBindings.Array.data[3].value
+      value: 
+      objectReference: {fileID: 1411170966}
     - target: {fileID: 6733511729784114563, guid: 5cb1e9f25fd7bab41a444a51865bf96e, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -398,6 +434,11 @@ MonoBehaviour:
   director: {fileID: 538750595}
   startButton: {fileID: 2080895832}
   nextSceneName: MainMenu
+--- !u!95 &226895672 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 457492139426734356, guid: 5cb1e9f25fd7bab41a444a51865bf96e, type: 3}
+  m_PrefabInstance: {fileID: 48110691}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &525290020 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7481630612462351817, guid: 5cb1e9f25fd7bab41a444a51865bf96e, type: 3}
@@ -476,6 +517,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1411170966 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 925729494953470442, guid: 5cb1e9f25fd7bab41a444a51865bf96e, type: 3}
+  m_PrefabInstance: {fileID: 48110691}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1586951226
 GameObject:
   m_ObjectHideFlags: 0
