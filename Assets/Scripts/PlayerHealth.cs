@@ -79,12 +79,14 @@ public class PlayerHealth : MonoBehaviour
         // 1. 즉시 멈춰야 할 것들
         if (movementScript != null) movementScript.enabled = false; // 이동 스크립트 중지
 
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+                Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (rb != null)
         {
             rb.velocity = Vector2.zero; // 물리적 속도 제거
             rb.bodyType = RigidbodyType2D.Kinematic; // 물리 영향 차단
         }
+
+        transform.rotation = Quaternion.Euler(0, 0, 90f);
 
         // 2. 애니메이션 멈추기
         Animator anim = GetComponent<Animator>();
@@ -138,7 +140,15 @@ public class PlayerHealth : MonoBehaviour
             timer += 0.2f;
         }
         originalColor.a = 1f;
-        spriteRenderer.color = originalColor;
-        isInvincible = false;
+
+        if (isDead) {
+        // 죽었다면 회색으로 고정
+        spriteRenderer.color = new Color(0.4f, 0.4f, 0.4f, 1f); 
+        } 
+        else {
+            // 살았다면 원래 색으로 복구
+            spriteRenderer.color = originalColor;
+            isInvincible = false;
+        }
     }
 }
