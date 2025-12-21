@@ -11,7 +11,7 @@ public class MainMenu : MonoBehaviour
     public void StartGame()
     {
         // "InGame" 부분에 실제 본 게임 씬 이름을 적기
-        SceneManager.LoadScene("hs_scene"); 
+        SceneManager.LoadScene("ksy-test"); 
     }
 
     public void QuitGame()
