@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -85,11 +85,11 @@ public class PlayerHealth : MonoBehaviour
         if (anim == null) anim = GetComponentInChildren<Animator>();
         if (anim != null)
         {
-            anim.speed = 0; // 애니메이션 정지
+            anim.speed = 0; // ��� �ӵ��� 0���� �ϸ� ���� ���ۿ��� �״�� ����ϴ�.
+            // �ƿ� ���� �ʹٸ�: anim.enabled = false;
         }
 
-        // 3. 배경음악 중지
-        AudioSource bgm = FindObjectOfType<AudioSource>(); // 씬 내의 메인 오디오 소스 찾기
+        AudioSource bgm = FindObjectOfType<AudioSource>();
         if (bgm != null) bgm.Stop();
 
         // 4. 결과창만 1.5초 뒤에 띄우도록 코루틴 시작
@@ -121,7 +121,15 @@ public class PlayerHealth : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
             timer += 0.2f;
         }
-        spriteRenderer.color = originalColor;
-        isInvincible = false;
+
+        if (isDead)
+        {
+            spriteRenderer.color = new Color(0.4f, 0.4f, 0.4f, 1f);
+        } else
+        {
+            spriteRenderer.color = originalColor;
+            isInvincible = false;
+        }
+        
     }
 }
