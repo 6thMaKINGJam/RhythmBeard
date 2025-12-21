@@ -91,8 +91,7 @@ public class PlayerHealth : MonoBehaviour
         if (anim == null) anim = GetComponentInChildren<Animator>();
         if (anim != null)
         {
-            anim.speed = 0; // ��� �ӵ��� 0���� �ϸ� ���� ���ۿ��� �״�� ����ϴ�.
-            // �ƿ� ���� �ʹٸ�: anim.enabled = false;
+            anim.enabled = false;
         }
 
         AudioSource bgm = FindObjectOfType<AudioSource>();
@@ -138,6 +137,7 @@ public class PlayerHealth : MonoBehaviour
 
             timer += 0.2f;
         }
+        originalColor.a = 1f;
         spriteRenderer.color = originalColor;
         isInvincible = false;
     }
