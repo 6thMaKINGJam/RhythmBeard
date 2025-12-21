@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/hs_scene.unity
     guid: 2387a51a4fa1b9e46ba9ee6dbd6d51cd
+  - enabled: 1
+    path: Assets/Scenes/ksy-test.unity
+    guid: df8cb238dfcee37439bd1ebf6d9f1d7f
   m_configObjects: {}

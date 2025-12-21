@@ -85,7 +85,7 @@ public class ResultManager : MonoBehaviour
 
     public void RestartGame()
     {
-        SceneManager.LoadScene("hs_scene");
+        SceneManager.LoadScene("ksy-test");
     }
     public void ExitGame()
     {

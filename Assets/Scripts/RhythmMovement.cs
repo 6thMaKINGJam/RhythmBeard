@@ -29,6 +29,11 @@ public class RhythmMovement : MonoBehaviour
     public GameObject jumpEffectPrefab;
     public GameObject landEffectPrefab;
     public Vector3 effectOffset = new Vector3(0, -0.5f, 0);
+    // [추가됨] 공격 이펙트 전용 설정
+    [Header("Attack FX (공격)")]
+    public GameObject attackEffectPrefab; // 공격 이펙트 프리팹 넣는 곳
+    // 공격 오프셋: X를 1f로 설정해서 오른쪽으로 보냄
+    public Vector3 attackOffset = new Vector3(0, 0, 0);
 
     // 내부 변수
     private Vector3 originalScale;
@@ -126,9 +131,17 @@ public class RhythmMovement : MonoBehaviour
             Jump();
         }
 
+        // 3. 공격 (M)
         if (Input.GetKeyDown(KeyCode.M))
         {
             if (anim != null) anim.SetTrigger("Attack");
+
+            if (attackEffectPrefab != null)
+            {
+                // 위치: 내 위치 + 설정한 오프셋(attackOffset)
+                // 회전: 반시계 90도 (0, 0, 90)
+                Instantiate(attackEffectPrefab, transform.position + attackOffset, Quaternion.Euler(0, 0, 90f));
+            }
         }
 
         if (anim != null) anim.SetBool("IsGrounded", isGrounded);

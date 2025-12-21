@@ -73,7 +73,7 @@ public class PlayerAttack : MonoBehaviour
         // 4. 카메라 흔들림 (적을 하나라도 때렸으면)
         if (hitAnything && MainCamera_Action.Instance != null)
         {
-            MainCamera_Action.Instance.PlayHitShake(0.2f, 0.1f);
+            MainCamera_Action.Instance.PlayHitShake(0.1f, 0.05f);
         }
     }
 
