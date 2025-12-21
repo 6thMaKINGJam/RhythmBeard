@@ -51182,6 +51182,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 185829143212016919, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 547495815767787289, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -51240,6 +51244,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5437552565760408087, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
       propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5437552565760408087, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5446746442431923368, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
@@ -51334,12 +51342,24 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.9607844
       objectReference: {fileID: 0}
+    - target: {fileID: 6119943702217689559, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
+      propertyPath: m_margin.w
+      value: 143.99695
+      objectReference: {fileID: 0}
+    - target: {fileID: 6119943702217689559, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
+      propertyPath: m_margin.x
+      value: 162.0492
+      objectReference: {fileID: 0}
     - target: {fileID: 6486359597798164156, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6486359597798164156, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
       propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6486359597798164156, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
+      propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6486359597798164156, guid: dc75f9c031f4a2649bd80dea142c8a24, type: 3}
@@ -51495,8 +51515,8 @@ MonoBehaviour:
   - {fileID: 1858945609}
   - {fileID: 1858945608}
   - {fileID: 1858945607}
-  fullHeart: {fileID: 2016144350, guid: 43cedf05d4d124d4788b3655876ed8ca, type: 3}
-  emptyHeart: {fileID: -1181433133, guid: 43cedf05d4d124d4788b3655876ed8ca, type: 3}
+  fullHeart: {fileID: 21300000, guid: 3ad54c9bc26033244bd07b516eac6f4a, type: 3}
+  emptyHeart: {fileID: 21300000, guid: f4eb35264822a704ca7149b3dfb8ff1e, type: 3}
 --- !u!1001 &1867564753
 PrefabInstance:
   m_ObjectHideFlags: 0
