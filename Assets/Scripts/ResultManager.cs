@@ -42,7 +42,7 @@ public class ResultManager : MonoBehaviour
             if (ingameDistanceText != null)
             {
                 // 한글 깨짐 방지를 위해 영어 "Distance" 사용
-                ingameDistanceText.text = "Distance: " + currentDist.ToString("F1") + "m";
+                ingameDistanceText.text = "달린 거리 : " + currentDist.ToString("F1") + "m";
             }
         }
     }
@@ -55,7 +55,7 @@ public class ResultManager : MonoBehaviour
         // 게임 오버 시 결과창 텍스트에 '최종 거리' 한 번 딱 입력
         if (resultDistanceText != null)
         {
-            resultDistanceText.text = "Final Distance: " + currentDist.ToString("F1") + "m";
+            resultDistanceText.text = "달린 거리 : " + currentDist.ToString("F1") + "m";
         }
 
         // 아래에서 위로 올라오는 코루틴 실행
